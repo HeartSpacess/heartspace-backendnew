@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const { check, validationResult } = require("express-validator");
-const authMiddleware = require("../middleware/authmiddleware"); // Middleware for JWT authentication
+const authMiddleware = require("../middleware/authMiddleware"); // ✅ Corrected path
 
 // ✅ Fetch All Posts (Latest First)
 router.get("/", async (req, res) => {
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 // ✅ Create a New Post (User must be authenticated)
 router.post(
     "/",
-    authMiddleware, // Ensures only logged-in users can create posts
+    authMiddleware, // ✅ Ensures only logged-in users can create posts
     [check("content", "Post content cannot be empty").not().isEmpty()],
     async (req, res) => {
         const errors = validationResult(req);
@@ -28,7 +28,7 @@ router.post(
 
         try {
             const { content } = req.body;
-            const user = req.user; // Extract user data from JWT token
+            const user = req.user; // ✅ Extract user data from JWT token
 
             if (!user || !user.userId) {
                 return res.status(401).json({ success: false, message: "Unauthorized. Please log in." });
