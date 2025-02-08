@@ -23,8 +23,8 @@ router.post("/signup", validateUser, async (req, res) => {
         const { name, email, password, location } = req.body;
 
         // Check if user already exists
-        let user = await User.findOne({ email });
-        if (user) {
+        let existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(400).json({ success: false, message: "User already exists" });
         }
 
@@ -33,7 +33,7 @@ router.post("/signup", validateUser, async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create new user
-        user = new User({ name, email, password: hashedPassword, location });
+        const user = new User({ name, email, password: hashedPassword, location });
         await user.save();
 
         // Generate JWT Token for automatic login
@@ -43,7 +43,7 @@ router.post("/signup", validateUser, async (req, res) => {
             success: true,
             message: "User registered successfully",
             token,
-            user: { id: user._id, name: user.name, email: user.email, location: user.location },
+            user: { _id: user._id, name: user.name, email: user.email, location: user.location },
         });
     } catch (error) {
         console.error("Signup Error:", error.message);
@@ -87,7 +87,7 @@ router.post(
                 message: "Login successful",
                 token,
                 expiresIn: 3600, // 1 hour in seconds
-                user: { id: user._id, name: user.name, email: user.email, location: user.location },
+                user: { _id: user._id, name: user.name, email: user.email, location: user.location },
             });
         } catch (error) {
             console.error("Login Error:", error.message);

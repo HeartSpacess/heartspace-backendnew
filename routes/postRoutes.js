@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const { check, validationResult } = require("express-validator");
-const authMiddleware = require("../middleware/authMiddleware"); // Middleware for JWT authentication
+const authMiddleware = require("../middleware/authmiddleware"); // Middleware for JWT authentication
 
 // ✅ Fetch All Posts (Latest First)
 router.get("/", async (req, res) => {
